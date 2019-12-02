@@ -33,4 +33,22 @@ public class UserController {
         userService.registerUser(user);
         return "redirect:/users/login";
     }
+    //This controller method is called when the request pattern is of type 'users/login'
+    @RequestMapping("users/login")
+    public String login(){
+        return "users/login";
+
+    }
+    //This controller method is called
+    // when the request pattern is of type 'users/login' and also the incoming request is of POST type
+    @RequestMapping(value ="users/login" ,method = RequestMethod.POST)
+    public String loginUser(User user){
+        boolean userExists = userService.login(user);
+        if (userExists) {
+            return "redirect:/images";
+        } else {
+            return "users/login";
+        }
+    }
+
 }
