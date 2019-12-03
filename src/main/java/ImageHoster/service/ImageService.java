@@ -27,4 +27,9 @@ public class ImageService {
         return new ImageService().images;
     }
 
+    //The method does not store the image in the database
+    public void uploadImage(Image image) {
+        return;
+    }
+
 }
