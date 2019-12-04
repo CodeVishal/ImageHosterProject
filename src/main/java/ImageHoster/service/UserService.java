@@ -22,11 +22,16 @@ public class UserService {
     // and password 'password' is hard-coded
     //This method returns true if the username is 'upgrad' and password is 'password'
 
-    public boolean login(User user) {
-        if (user.getUsername().equals("upgrad") && user.getPassword().equals("password"))
-            return true;
-        else
-            return false;
+    public User login(User user) {
+       User existingUSer =  userRepository.checkUser(user.getUsername() ,user.getPassword());
+
+       if(existingUSer != null){
+           return existingUSer;
+       }
+       else{
+           return  null;
+       }
+
     }
 
 }
