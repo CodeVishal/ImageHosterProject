@@ -1,6 +1,6 @@
 package ImageHoster.controller;
 
-import ImageHoster.HardCodedImage;
+
 import ImageHoster.model.Image;
 import ImageHoster.model.User;
 import ImageHoster.service.ImageService;
@@ -25,8 +25,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private HardCodedImage hardCodedImage;
+
 
     //This method displays all the images in the user home page after successful login
 
@@ -37,29 +36,19 @@ public class ImageController {
 
         return "images";
     }
-
-    /*  This method is called when the details of the specific image with corresponding title
-	are to be displayed.
-    The logic is to get the image from the databse with corresponding title.
-	After getting the image from the database the details are shown
-    But since the images are not stored in the database, therefore, we have hard-coded
-	two images here
-    If the title of the image is 'Dr. Strange', an image object is created with
-	all the corresponding details
-    If the title of the image is 'SpiderMan', an image object is created with all
-	the corresponding details
-   The image object is added to the model and 'images/image.html' file is returned
-   */
-
+    /*This method is called when the details of the specific image with corresponding title are to be displayed
+        The logic is to get the image from the databse with corresponding title. After getting the image from
+        the database the details are shown
+        First receive the dynamic parameter in the incoming request URL in a string variable 'title' and
+        also the Model type object
+        Call the getImageByTitle() method in the business logic to fetch all the details of that image
+        Add the image in the Model type object with 'image' as the key
+        Return 'images/image.html' file
+    */
     @RequestMapping("/images/{title}")
     public String showImage(@PathVariable("title") String title, Model model) {
-        Date date = new Date();
-        Image image = null;
-        if (title.equals("Dr. Strange")) {
-            image = new Image(1, "Dr. Strange", hardCodedImage.getDrStrange(), "Dr. Strange has a time stone", date);
-        } else if (title.equals("SpiderMan")) {
-            image = new Image(2, "SpiderMan", hardCodedImage.getSpiderMan(), "Spider man dies in Infinity War", date);
-        }
+
+        Image image = imageService.getImageByTitle(title);
 
         model.addAttribute("image", image);
         return "images/image";
@@ -98,14 +87,6 @@ public class ImageController {
     //This method converts the image to Base64 format
     private String convertUploadedFileToBase64(MultipartFile file) throws IOException {
         return Base64.getEncoder().encodeToString(file.getBytes());
-    }
-
-    public HardCodedImage getHardCodedImage() {
-        return hardCodedImage;
-    }
-
-    public void setHardCodedImage(HardCodedImage hardCodedImage) {
-        this.hardCodedImage = hardCodedImage;
     }
 
 }
