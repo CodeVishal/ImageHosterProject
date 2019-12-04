@@ -64,6 +64,7 @@ public class UserController {
         User existingUser = userService.login(user);
         if (existingUser != null) {
             //Set the attribute of the session with existingUser and 'loggeduser' as the key
+            session.setAttribute("loggeduser",existingUser);
             return "redirect:/images";
         } else {
             return "users/login";

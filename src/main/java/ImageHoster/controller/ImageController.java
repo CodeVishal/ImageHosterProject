@@ -2,6 +2,7 @@ package ImageHoster.controller;
 
 import ImageHoster.HardCodedImage;
 import ImageHoster.model.Image;
+import ImageHoster.model.User;
 import ImageHoster.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Date;
@@ -71,14 +73,21 @@ public class ImageController {
     }
 
     /*This controller method is called when the request pattern is of type 'images/upload'
-    and also the incoming request is of POST type.The method receives all the details of the image to be stored
-    in the database, but currently we are not using database so
-    the business logic simply retuns null and does not store anything in the database
-    After you get the imageFile, convert it to Base64 format and store it as a string
-    After storing the image, this method directs to the logged in user homepage displaying all the images
+    and also the incoming request is of POST type
+    The method receives all the details of the image to be stored in the database,
+    and now the image will be sent to the business logic to be persisted in the database
+    After you get the imageFile, set the user of the image by getting the logged in user
+    from the Http Session
+    Convert the image to Base64 format and store it as a string in the 'imageFile' attribute
+    Set the date on which the image is posted
+    After storing the image, this method directs to the logged in user
+    homepage displaying all the images
     */
     @RequestMapping(value = "/images/upload", method = RequestMethod.POST)
-    public String createImage(@RequestParam("file") MultipartFile file, Image newImage) throws IOException {
+    public String createImage(@RequestParam("file") MultipartFile file, Image newImage, HttpSession session) throws IOException {
+
+        User user = (User) session.getAttribute("loggeduser");
+        newImage.setUser(user);
         String uploadedImageData = convertUploadedFileToBase64(file);
         newImage.setImageFile(uploadedImageData);
         newImage.setDate(new Date());
