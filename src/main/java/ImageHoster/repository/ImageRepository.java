@@ -67,5 +67,40 @@ public class ImageRepository {
         } catch (NoResultException nre) {
             return null;
         }
+
     }
+        /*
+            The method creates an instance of EntityManager
+            Executes JPQL query to fetch the image from the database with corresponding id
+            Returns the image fetched from the database
+         */
+
+    public Image getImage(Integer imageId) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i where i.id =:imageId", Image.class).setParameter("imageId", imageId);
+        Image image = typedQuery.getSingleResult();
+        return image;
+    }
+
+    /*The method receives the Image object to be updated in the database
+    Creates an instance of EntityManager
+    Starts a transaction
+    The transaction is committed if it is successful
+    The transaction is rolled back in case of unsuccessful transaction
+
+     */
+    public void updateImage(Image updatedImage) {
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+            transaction.begin();
+            em.merge(updatedImage);
+            transaction.commit();
+        } catch (Exception e) {
+            transaction.rollback();
+        }
+    }
+
+
 }
