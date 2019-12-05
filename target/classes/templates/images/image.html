@@ -21,6 +21,10 @@
 
     <div>
         <a th:href="@{/editImage(imageId=${image.id})}">Edit</a>
+        <form th:action="@{/deleteImage(imageId=${image.id})}" th:method="delete">
+            <input type="submit" value="Delete"/>
+        </form>
+
     </div>
 </main>
 </body>
