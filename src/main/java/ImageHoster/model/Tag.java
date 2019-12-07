@@ -13,7 +13,7 @@ import java.util.List;
     all the attributes in 'Tag' class
  */
 
-@Table(name = "Tags")
+@Table(name = "tags")
 public class Tag {
 
     //@Id annotation specifies that the corresponding attribute is a primary key
